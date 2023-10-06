@@ -1,11 +1,13 @@
 <template>
-  <label>{{ label }}</label>
-  <input
-    :value="modelValue"
-    class="form-input"
-    v-bind="$attrs"
-    @input="$emit('update:modelValue', $event.target.value)"
-  >
+  <div class="form-input">
+    <label>{{ label }}</label>
+    <input
+      :value="modelValue"
+      class="input"
+      v-bind="$attrs"
+      @input="$emit('update:modelValue', $event.target.value)"
+    >
+  </div>
 </template>
 
 <script setup>
