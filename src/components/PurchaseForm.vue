@@ -22,19 +22,11 @@
               class="wide"
             />
 
-            <div>
-              <label>Country</label>
-              <select v-model="formData.country">
-                <option
-                  v-for="(country, idx) in countries"
-                  :key="idx"
-                  :value="country"
-                  :selected="country === formData.country"
-                >
-                  {{ country }}
-                </option>
-              </select>
-            </div>
+            <FormSelect
+              v-model="formData.country"
+              label="Country"
+              :options="countries"
+            />
 
             <FormInput
               v-model="formData.postalCode"
@@ -74,6 +66,8 @@
 
 <script setup>
 import FormInput from "./FormInput.vue";
+import FormSelect from "./FormSelect.vue";
+import { COUNTRIES } from "../utils/content.js";
 
 import { ref } from "vue";
 
@@ -82,7 +76,7 @@ defineProps({
     type: Number,
     default: 1
   }
-})
+});
 
 const formData = ref({
   firstName: "",
@@ -93,10 +87,7 @@ const formData = ref({
   phoneNumber: ""
 });
 
-const countries = ref([
-  "Poland",
-  "United States"
-]);
+const countries = COUNTRIES;
 
 const emit = defineEmits(["go-next", "go-previous"]);
 

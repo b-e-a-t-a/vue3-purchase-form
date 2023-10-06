@@ -29,9 +29,15 @@ import HomeView from "./views/HomeView.vue"
   @media (min-width: 900px)
     flex-direction: row !important
 
+fieldset
+  border: 0
+  margin: 0
+  padding: 0
+
 h4, button
   text-transform: uppercase
   font-weight: 800
+
 input
   width: 100%
 
