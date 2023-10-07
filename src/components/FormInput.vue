@@ -1,5 +1,5 @@
 <template>
-  <div class="form-input">
+  <div class="form-input" :class="{'error': error}">
     <label>{{ label }}</label>
     <input
       :value="modelValue"
@@ -10,11 +10,12 @@
     <span v-if="inputIcon">
       <i :class="inputIcon" :style="styleIcon"></i>
     </span>
+    <div v-if="error" class="error-message">{{ errorMessage }}</div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   label: {
     type: String,
     default: ""
@@ -30,6 +31,14 @@ defineProps({
   styleIcon: {
     type: String,
     default: ""
+  },
+  errorMessage: {
+    type: String,
+    default: ""
+  },
+  error: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
@@ -48,4 +57,13 @@ defineProps({
     left: calc(100% - 10px)
     bottom: 50%
     transform: translate(-100%, 50%)
+  &:focus-within
+    border: 1px solid $action-color
+  &.error
+    border: 1px solid red
+
+.error-message
+  color: $error-color
+  font-size: 12px
+
 </style>

@@ -2,6 +2,7 @@
   <button
     class="submit-btn"
     :type="type"
+    :disabled="disabled"
   >
     <slot name="icon"></slot>
     <slot name="text">{{ text }}</slot>
@@ -17,6 +18,10 @@ defineProps({
   type: {
     type: String,
     default: "button"
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
@@ -41,4 +46,7 @@ defineProps({
   &:hover
     background-color: darken($action-color, 15%)
     border-color: darken($action-color, 15%)
+  &:disabled
+    opacity: 0.5
+    cursor: not-allowed
 </style>

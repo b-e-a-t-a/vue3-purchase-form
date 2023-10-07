@@ -8,11 +8,20 @@
               v-model="formData.firstName"
               label="First name"
               placeholder="Elon"
+              autofocus
+              minlength="2"
+              errorMessage="Please enter a valid first name"
+              :error="(!formData.firstName || formData.firstName.length < 2) && nameBlured"
+              @blur="nameBlured = true"
             />
             <FormInput
               v-model="formData.lastName"
               label="Last name"
               placeholder="Musk"
+              minlength="2"
+              errorMessage="Please enter a valid last name"
+              :error="(!formData.lastName || formData.lastName.length < 2) && lastNameBlured"
+              @blur="lastNameBlured = true"
             />
             <FormInput
               v-model="formData.email"
@@ -20,6 +29,10 @@
               placeholder="elon@spacex.com"
               type="email"
               class="wide"
+              autocomplete="off"
+              errorMessage="Please enter a valid email"
+              :error="invalidEmail"
+              @blur="emailBlured = true"
             />
             <FormSelect
               v-model="formData.country"
@@ -31,6 +44,10 @@
               label="Postal Code"
               placeholder="10001"
               type="text"
+              maxlength="5"
+              errorMessage="Please enter a valid postal code"
+              :error="invalidPostalCode"
+              @blur="postalCodeBlured = true"
             />
             <FormInput
               v-model="formData.phoneNumber"
@@ -38,6 +55,10 @@
               placeholder="(212) 692-93-92"
               type="tel"
               class="wide"
+              pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
+              errorMessage="Please enter a phone number in format (212) 692-93-92"
+              :error="invalidPhone"
+              @blur="phoneBlured = true"
             />
           </fieldset>
 
@@ -63,6 +84,7 @@
               label="Credit Card Number"
               placeholder="0000 - 0000 - 0000 - 0000"
               class="wide"
+              autocomplete="off"
               inputIcon="fa-brands fa-cc-visa"
               styleIcon="color: white;
                 background-color: #243c64;
@@ -73,20 +95,23 @@
               v-model="formData.securityCode"
               label="Security code"
               placeholder="***"
+              autocomplete="off"
               inputIcon="fa-regular fa-circle-question"
               styleIcon="color: #c2c2c2; font-size: 20px;"
+              maxlength="3"
             />
             <FormInput
               v-model="formData.expireDate"
               label="Expiration date"
               placeholder="MM / YY"
               type="text"
+              autocomplete="off"
             />
             </fieldset>
           <SubmitButton
             text="Complete Purchase"
             type="submit"
-            @click="purchase"
+            :disabled="!isStep2Valid"
           >
             <template #icon>
               <i
@@ -113,13 +138,18 @@ import FormInput from "./FormInput.vue";
 import FormSelect from "./FormSelect.vue";
 import SubmitButton from "./SubmitButton.vue";
 import { COUNTRIES } from "../utils/content.js";
+import { validateEmail, validatePostalCode, validatePhoneNumber } from "../utils/validators.js";
 
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 defineProps({
   step: {
     type: Number,
     default: 1
+  },
+  error: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -137,17 +167,71 @@ const formData = ref({
 
 const countries = COUNTRIES;
 
+const nameBlured = ref(false);
+const lastNameBlured = ref(false);
+const emailBlured = ref(false);
+const postalCodeBlured = ref(false);
+const phoneBlured = ref(false);
+
+const invalidEmail = computed(() => {
+  return Boolean(!formData.value.email && emailBlured.value) //no value but touched
+    || Boolean(emailBlured.value && !validateEmail(formData.value.email)) //value in incorrect format
+});
+
+const invalidPostalCode = computed(() => {
+  return Boolean(!formData.value.postalCode && postalCodeBlured.value) //no value but touched
+    || Boolean(postalCodeBlured.value && !validatePostalCode(formData.value.postalCode)) //value in incorrect format
+})
+
+const invalidPhone = computed(() => {
+  return Boolean(!formData.value.phoneNumber && phoneBlured.value) //no value but touched
+    || Boolean(phoneBlured.value && !validatePhoneNumber(formData.value.phoneNumber)) //value in incorrect format
+})
+
 const emit = defineEmits(["go-next", "go-previous"]);
 
+const isStep1Valid = computed(() => {
+  const valid = formData.value.firstName &&
+    formData.value.lastName &&
+    !invalidEmail.value &&
+    !invalidPostalCode.value &&
+    !invalidPhone.value;
+  return valid;
+});
+
 const goNext = () => {
-  emit("go-next");
+  nameBlured.value = true;
+  lastNameBlured.value = true;
+  emailBlured.value = true;
+  postalCodeBlured.value = true;
+  phoneBlured.value = true;
+
+  if (isStep1Valid.value) {
+    emit("go-next");
+  }
 };
+
 const goPrevious = () => {
   emit("go-previous");
 };
+
+
+const isStep2Valid = computed(() => {
+  return true;
+});
+
+const isFormValid = computed(() => {
+  console.log('isFormValid')
+});
+
+
 const purchase = () => {
-  console.log('purchase');
-}
+  try {
+    console.log('purchase', formData._value);
+  } catch (error) {
+    console.log("error", error);
+  }
+};
 </script>
 
 <style lang="sass" scoped>

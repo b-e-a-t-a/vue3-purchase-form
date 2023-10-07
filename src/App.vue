@@ -52,6 +52,7 @@ input, select
   border: none
   padding: 0
   font-weight: 600
+  outline: none
 label
   font-size: 80%
   color: rgba(0, 0, 0, 0.8)
@@ -62,8 +63,13 @@ select
 input
   box-sizing: border-box
   color: black
+  border: none
   &::placeholder
     color: $placeholder-color
+  &:hover, &:focus-visible, &:focus
+    //color: $action-color
+  &.error
+    border: 1px solid $error-color
 option
   border: none
 
