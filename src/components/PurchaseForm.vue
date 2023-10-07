@@ -83,6 +83,7 @@
               v-model="formData.cardNumber"
               label="Credit Card Number"
               placeholder="0000 - 0000 - 0000 - 0000"
+              type="tel"
               class="wide"
               autocomplete="off"
               inputIcon="fa-brands fa-cc-visa"
@@ -99,13 +100,24 @@
               inputIcon="fa-regular fa-circle-question"
               styleIcon="color: #c2c2c2; font-size: 20px;"
               maxlength="3"
+              pattern="^[0-9]{3}$"
+              errorMessage="Please enter 3 digit security code"
+              :error="invalidSecurityCode"
+              @blur="securityCodeBlured = true"
             />
             <FormInput
-              v-model="formData.expireDate"
+              v-model="formData.expiredDate"
               label="Expiration date"
               placeholder="MM / YY"
               type="text"
               autocomplete="off"
+              maxlength="5"
+              pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$"
+              errorMessage="Please enter a valid expiration date"
+              inputmode="numerical"
+              :error="invalidExpiredDate"
+              @keyup="formatExpiredDate"
+              @blur="expiredDateBlured = true"
             />
             </fieldset>
           <SubmitButton
@@ -138,7 +150,13 @@ import FormInput from "./FormInput.vue";
 import FormSelect from "./FormSelect.vue";
 import SubmitButton from "./SubmitButton.vue";
 import { COUNTRIES } from "../utils/content.js";
-import { validateEmail, validatePostalCode, validatePhoneNumber } from "../utils/validators.js";
+import { validateEmail,
+  validatePostalCode,
+  validatePhoneNumber,
+  validateSecurityCode,
+  formatExpiredDate,
+  validateExpirationDate
+} from "../utils/validators.js";
 
 import { ref, computed } from "vue";
 
@@ -162,7 +180,7 @@ const formData = ref({
   phoneNumber: "",
   cardNumber: "",
   securityCode: "",
-  expireDate: ""
+  expiredDate: ""
 });
 
 const countries = COUNTRIES;
@@ -172,6 +190,9 @@ const lastNameBlured = ref(false);
 const emailBlured = ref(false);
 const postalCodeBlured = ref(false);
 const phoneBlured = ref(false);
+
+const expiredDateBlured = ref(false);
+const securityCodeBlured = ref(false);
 
 const invalidEmail = computed(() => {
   return Boolean(!formData.value.email && emailBlured.value) //no value but touched
@@ -187,6 +208,22 @@ const invalidPhone = computed(() => {
   return Boolean(!formData.value.phoneNumber && phoneBlured.value) //no value but touched
     || Boolean(phoneBlured.value && !validatePhoneNumber(formData.value.phoneNumber)) //value in incorrect format
 })
+
+const invalidSecurityCode = computed(() => {
+  return Boolean(!formData.value.securityCode && securityCodeBlured.value) ||
+    Boolean(securityCodeBlured.value && !validateSecurityCode(formData.value.securityCode))
+})
+
+const invalidExpiredDate = computed(() => {
+  return Boolean(!formData.value.expiredDate && expiredDateBlured.value)
+    || Boolean(formData.value.expiredDate && formData.value.expiredDate.length > 4 && !isExpiredDateValid.value) //validate after completing date
+})
+
+const isExpiredDateValid = computed(() => {
+  const expireMonth = Number(formData.value.expiredDate.slice(-5, -3));
+  const expireYear = Number(formData.value.expiredDate.slice(-2));
+  return Boolean(validateExpirationDate(expireMonth, expireYear));
+});
 
 const emit = defineEmits(["go-next", "go-previous"]);
 
@@ -215,7 +252,6 @@ const goPrevious = () => {
   emit("go-previous");
 };
 
-
 const isStep2Valid = computed(() => {
   return true;
 });
@@ -226,6 +262,9 @@ const isFormValid = computed(() => {
 
 
 const purchase = () => {
+  expiredDateBlured.value = true;
+  securityCodeBlured.value = true;
+
   try {
     console.log('purchase', formData._value);
   } catch (error) {
