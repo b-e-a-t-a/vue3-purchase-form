@@ -19,6 +19,7 @@ import HomeView from "./views/HomeView.vue"
   padding-left: calc(50px + $step-margin)
   max-width: 1024px
   margin: 0 auto
+
 .wrapper
   min-height: 100vh
   padding: 0 20px
@@ -34,7 +35,7 @@ fieldset
   margin: 0
   padding: 0
 
-h4, button
+h5, button
   text-transform: uppercase
   font-weight: 800
 
@@ -50,9 +51,10 @@ input, select
   font-size: 100%
   border: none
   padding: 0
+  font-weight: 600
 label
   font-size: 80%
-  color: rgba(0, 0, 0, 0.7)
+  color: rgba(0, 0, 0, 0.8)
   font-weight: 700
 select
   text-transform: none
@@ -60,6 +62,8 @@ select
 input
   box-sizing: border-box
   color: black
+  &::placeholder
+    color: $placeholder-color
 option
   border: none
 
@@ -69,4 +73,7 @@ option
     place-items: flex-start
     flex-wrap: wrap
 
+@media screen and (max-width: 600px)
+  .container
+    padding-left: 50px
 </style>

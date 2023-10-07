@@ -1,8 +1,8 @@
 <template>
   <section class="purchase-form">
-    <transition name="form-fade">
-      <section v-show="step === 1">
-        <form @submit.prevent="purchase">
+    <form @submit.prevent="purchase">
+      <transition name="form-fade" mode="out-in">
+        <section v-show="step === 1">
           <fieldset class="fieldset">
             <FormInput
               v-model="formData.firstName"
@@ -21,13 +21,11 @@
               type="email"
               class="wide"
             />
-
             <FormSelect
               v-model="formData.country"
               label="Country"
               :options="countries"
             />
-
             <FormInput
               v-model="formData.postalCode"
               label="Postal Code"
@@ -54,31 +52,59 @@
               ></i>
             </template>
           </SubmitButton>
-        </form>
-      </section>
-    </transition>
+        </section>
+      </transition>
 
-    <transition name="form-fade">
-      <section v-show="step === 2">
-        PAYMENT DETAILS
-        <SubmitButton
-          text="Complete Purchase"
-          type="submit"
-          @click="purchase"
-        >
-          <template #icon>
-            <i
-              class="fa-solid fa-cart-shopping"
-              style="color: white; marginRight: 5px; font-size: 15px"
-            ></i>
-          </template>
-        </SubmitButton>
-        <button type="button" @click="goPrevious">
-          <span>Previous</span>
-        </button>
-      </section>
-    </transition>
-
+      <transition name="form-fade" mode="out-in">
+        <section v-show="step === 2">
+          <fieldset class="fieldset">
+            <FormInput
+              v-model="formData.cardNumber"
+              label="Credit Card Number"
+              placeholder="0000 - 0000 - 0000 - 0000"
+              class="wide"
+              inputIcon="fa-brands fa-cc-visa"
+              styleIcon="color: white;
+                background-color: #243c64;
+                border: 1px solid #c2c2c2;
+                font-size: 20px;"
+            />
+            <FormInput
+              v-model="formData.securityCode"
+              label="Security code"
+              placeholder="***"
+              inputIcon="fa-regular fa-circle-question"
+              styleIcon="color: #c2c2c2; font-size: 20px;"
+            />
+            <FormInput
+              v-model="formData.expireDate"
+              label="Expiration date"
+              placeholder="MM / YY"
+              type="text"
+            />
+            </fieldset>
+          <SubmitButton
+            text="Complete Purchase"
+            type="submit"
+            @click="purchase"
+          >
+            <template #icon>
+              <i
+                class="fa-solid fa-cart-shopping"
+                style="color: white; marginRight: 5px; font-size: 15px"
+              ></i>
+            </template>
+          </SubmitButton>
+          <div class="back-btn" @click="goPrevious">
+            <span class="back-icon">
+              <i class="fa-solid fa-arrow-left" style="marginRight: 10px; font-size: 10px">
+              </i>
+            </span>
+            <span class="back-text">previous step</span>
+          </div>
+        </section>
+      </transition>
+    </form>
   </section>
 </template>
 
@@ -103,7 +129,10 @@ const formData = ref({
   email: "",
   country: "United States",
   postalCode: "",
-  phoneNumber: ""
+  phoneNumber: "",
+  cardNumber: "",
+  securityCode: "",
+  expireDate: ""
 });
 
 const countries = COUNTRIES;
@@ -123,10 +152,24 @@ const purchase = () => {
 
 <style lang="sass" scoped>
 @import "../assets/main.sass"
-
-.form-fade-enter-active,
+.back-btn
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 100%
+  padding: 8px 0
+  cursor: pointer
+  color: $placeholder-color
+  font-size: 14px
+  border: 1px solid transparent
+  &:hover
+    border-color: $placeholder-color
+    border-bottom: 2px solid darken($placeholder-color, 10%)
+    color: darken($placeholder-color, 30%)
+.form-fade-enter-active
+  transition: opacity 0.3s ease-in-out
 .form-fade-leave-active
-  transition: opacity 1s ease
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1)
 
 .form-fade-enter-from,
 .form-fade-leave-to

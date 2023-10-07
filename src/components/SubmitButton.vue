@@ -26,10 +26,11 @@ defineProps({
 .submit-btn
   width: 100%
   background-color: $action-color
-  border: 1px solid $action-color
+  border: 2px solid $action-color
+  border-bottom: 2px solid darken($action-color, 10%)
   border-radius: 3px
-  padding: 10px 0
-  margin: 30px 0 5px
+  padding: 14px 0
+  margin: 40px 0 5px
   color: white
   cursor: pointer
   outline: none

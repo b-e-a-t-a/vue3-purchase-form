@@ -2,8 +2,8 @@
   <div class="step">
     <span class="step-number">{{ step }}</span>
     <span>
-      <h4 v-if="step === 1">Personal Information</h4>
-      <h4 v-if="step === 2">Payment details</h4>
+      <h5 v-if="step === 1">Personal Information</h5>
+      <h5 v-if="step === 2">Payment details</h5>
     </span>
   </div>
 </template>
@@ -30,9 +30,9 @@ defineProps({
     display: flex
     justify-content: center
     align-items: center
-    min-width: 25px
-    min-height: 25px
-    margin-right: 5px
+    min-width: 20px
+    min-height: 20px
+    margin-right: 10px
     margin-left: calc(0px - $step-margin)
     color: white
     background-color: black
@@ -41,4 +41,8 @@ defineProps({
     font-weight: 700
     line-height: 1
     vertical-align: middle
+
+@media screen and (max-width: 600px)
+  .step-number
+    margin-left: 0
 </style>
