@@ -2,7 +2,7 @@
   <section class="purchase-form">
     <transition name="form-fade">
       <section v-show="step === 1">
-        <form @submit.prevent="goNext">
+        <form @submit.prevent="purchase">
           <fieldset class="fieldset">
             <FormInput
               v-model="formData.firstName"
@@ -43,11 +43,17 @@
             />
           </fieldset>
 
-          <button type="submit">
-            <i class="fa-solid fa-cart-shopping" style="color: white;"></i>
-            <span>Next</span>
-          </button>
-
+          <SubmitButton
+            text="Next"
+            @click="goNext"
+          >
+            <template #icon>
+              <i
+                class="fa-solid fa-cart-shopping"
+                style="color: white; marginRight: 5px; font-size: 15px"
+              ></i>
+            </template>
+          </SubmitButton>
         </form>
       </section>
     </transition>
@@ -55,6 +61,18 @@
     <transition name="form-fade">
       <section v-show="step === 2">
         PAYMENT DETAILS
+        <SubmitButton
+          text="Complete Purchase"
+          type="submit"
+          @click="purchase"
+        >
+          <template #icon>
+            <i
+              class="fa-solid fa-cart-shopping"
+              style="color: white; marginRight: 5px; font-size: 15px"
+            ></i>
+          </template>
+        </SubmitButton>
         <button type="button" @click="goPrevious">
           <span>Previous</span>
         </button>
@@ -67,6 +85,7 @@
 <script setup>
 import FormInput from "./FormInput.vue";
 import FormSelect from "./FormSelect.vue";
+import SubmitButton from "./SubmitButton.vue";
 import { COUNTRIES } from "../utils/content.js";
 
 import { ref } from "vue";
@@ -97,6 +116,9 @@ const goNext = () => {
 const goPrevious = () => {
   emit("go-previous");
 };
+const purchase = () => {
+  console.log('purchase');
+}
 </script>
 
 <style lang="sass" scoped>
@@ -109,9 +131,6 @@ const goPrevious = () => {
 .form-fade-enter-from,
 .form-fade-leave-to
   opacity: 0
-
-button
-  width: 100%
 
 @media screen and (min-width: 900px)
   .fieldset

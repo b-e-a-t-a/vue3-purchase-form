@@ -40,4 +40,10 @@ defineProps({
 </script>
 
 <style lang="sass" scoped>
+.form-select
+  background-color: white
+  border-radius: 3px
+  padding: 5px 10px
+  border-bottom: solid 1px rgba(0, 0, 0, 0.3)
+  line-height: 1.3em
 </style>

@@ -25,6 +25,7 @@ defineProps({
   margin: 0 auto
   width: 100%
   position: relative
+  margin-bottom: 20px
   &-number
     display: flex
     justify-content: center
