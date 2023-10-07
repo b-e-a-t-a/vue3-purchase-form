@@ -101,6 +101,7 @@
               styleIcon="color: #c2c2c2; font-size: 20px;"
               maxlength="3"
               pattern="^[0-9]{3}$"
+              tooltipText="Some info regarding CVV"
               errorMessage="Please enter 3 digit security code"
               :error="invalidSecurityCode"
               @blur="securityCodeBlured = true"

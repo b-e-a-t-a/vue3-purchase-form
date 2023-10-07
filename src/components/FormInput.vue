@@ -3,12 +3,19 @@
     <label>{{ label }}</label>
     <input
       :value="modelValue"
+      isTooltipVisible
       class="input"
       v-bind="$attrs"
       @input="$emit('update:modelValue', $event.target.value)"
     >
-    <span v-if="inputIcon">
+    <span v-if="inputIcon" class="tooltip-bg"
+      @mouseover="isTooltipVisible = true"
+      @mouseleave="isTooltipVisible = false"
+    >
       <i :class="inputIcon" :style="styleIcon"></i>
+      <span v-show="isTooltipVisible && tooltipText" class="tooltip">
+        {{tooltipText}}
+      </span>
     </span>
     <div v-if="error" class="error-message">{{ errorMessage }}</div>
   </div>
@@ -39,6 +46,14 @@ const props = defineProps({
   error: {
     type: Boolean,
     default: false
+  },
+  isTooltipVisible: {
+    type: Boolean,
+    default: false
+  },
+  tooltipText: {
+    type: String,
+    default: ""
   }
 })
 </script>
@@ -66,4 +81,21 @@ const props = defineProps({
   color: $error-color
   font-size: 12px
 
+.tooltip-bg
+  position: relative
+  display: inline-block
+.tooltip
+  position: absolute
+  z-index: 3
+  width: 160px
+  background: grey
+  text-align: left
+  color: white
+  font-weight: 600
+  font-size: 12px
+  border-radius: 2px
+  padding: 5px 10px
+  word-wrap: break-word
+  line-height: 150%
+  margin-left: -15px
 </style>
