@@ -1,4 +1,6 @@
 # vue3-form
+View in [Github Pages](https://b-e-a-t-a.github.io/vue3-purchase-form/) or directly on [Github](https://github.com/b-e-a-t-a/vue3-purchase-form/)
+
 
 This template should help get you started developing with Vue 3 in Vite.
 
