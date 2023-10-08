@@ -8,8 +8,7 @@
       @go-next="increaseStep"
       @go-previous="decreaseStep"
     />
-    <OrderDetails class="sidebar"/>
-    <!-- <pre>{{ formData }}</pre> -->
+    <OrderDetails class="sidebar" :class="{'fitted' : step === 1}"/>
   </main>
 </template>
 
@@ -48,4 +47,6 @@ const decreaseStep = () => {
     grid-area: main
   .sidebar
     grid-area: sidebar
+  .fitted
+    max-height: calc(100% - 51px - 5px - 40px) // button heigh and button margin
 </style>
