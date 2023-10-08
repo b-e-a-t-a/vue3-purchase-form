@@ -20,7 +20,7 @@ import PurchaseForm from "../components/PurchaseForm.vue";
 
 import { ref } from "vue";
 
-let step = ref(2);
+let step = ref(1);
 
 const increaseStep = () => {
   step.value++;

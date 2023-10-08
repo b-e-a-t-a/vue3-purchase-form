@@ -12,6 +12,17 @@ export const validatePhoneNumber = (number) => {
 };
 
 
+export const formatCardNumber = (event) => {
+  let code = (event.which) ? event.which : event.keyCode;
+  if ((code > 31 && (code < 48 || code > 57)) && code !== 46) {
+    event.preventDefault();
+  } else {
+    event.target.value = event.target.value.split("-").join(""); //remove hyphens
+    event.target.value ?
+      event.target.value = event.target.value.match(/.{1,4}/g).join("-") : '';
+  }
+}
+
 export const validateSecurityCode = (code) => {
   return /^[0-9]{3}$/.test(code);
 };

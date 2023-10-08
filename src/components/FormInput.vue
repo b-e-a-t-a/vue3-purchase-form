@@ -89,7 +89,7 @@ const props = defineProps({
   z-index: 3
   width: 160px
   background: grey
-  text-align: left
+  text-align: right
   color: white
   font-weight: 600
   font-size: 12px

@@ -86,11 +86,17 @@
               type="tel"
               class="wide"
               autocomplete="off"
-              inputIcon="fa-brands fa-cc-visa"
+              :inputIcon="getCardIcon"
               styleIcon="color: white;
                 background-color: #243c64;
                 border: 1px solid #c2c2c2;
                 font-size: 20px;"
+              inputmode="numeric"
+              maxlength="19"
+              errorMessage="Please enter correct credit card number"
+              :error="invalidCardNumber"
+              @keypress="formatCardNumber"
+              @blur="cardNumberBlured = true"
             />
             <FormInput
               v-model="formData.securityCode"
@@ -101,7 +107,7 @@
               styleIcon="color: #c2c2c2; font-size: 20px;"
               maxlength="3"
               pattern="^[0-9]{3}$"
-              tooltipText="Some info regarding CVV"
+              tooltipText="The 3 digits on the back of your credit card"
               errorMessage="Please enter 3 digit security code"
               :error="invalidSecurityCode"
               @blur="securityCodeBlured = true"
@@ -115,7 +121,7 @@
               maxlength="5"
               pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$"
               errorMessage="Please enter a valid expiration date"
-              inputmode="numerical"
+              inputmode="numeric"
               :error="invalidExpiredDate"
               @keyup="formatExpiredDate"
               @blur="expiredDateBlured = true"
@@ -154,6 +160,7 @@ import { COUNTRIES } from "../utils/content.js";
 import { validateEmail,
   validatePostalCode,
   validatePhoneNumber,
+  formatCardNumber,
   validateSecurityCode,
   formatExpiredDate,
   validateExpirationDate
@@ -192,6 +199,7 @@ const emailBlured = ref(false);
 const postalCodeBlured = ref(false);
 const phoneBlured = ref(false);
 
+const cardNumberBlured = ref(false);
 const expiredDateBlured = ref(false);
 const securityCodeBlured = ref(false);
 
@@ -210,14 +218,20 @@ const invalidPhone = computed(() => {
     || Boolean(phoneBlured.value && !validatePhoneNumber(formData.value.phoneNumber)) //value in incorrect format
 })
 
+const invalidCardNumber = computed(() => {
+  return Boolean(!formData.value.cardNumber && cardNumberBlured.value)
+    || Boolean(formData.value.cardNumber && formData.value.cardNumber.length < 19 && cardNumberBlured.value)
+})
+
 const invalidSecurityCode = computed(() => {
-  return Boolean(!formData.value.securityCode && securityCodeBlured.value) ||
-    Boolean(securityCodeBlured.value && !validateSecurityCode(formData.value.securityCode))
+  return Boolean(!formData.value.securityCode && securityCodeBlured.value)
+    || Boolean(securityCodeBlured.value && !validateSecurityCode(formData.value.securityCode))
 })
 
 const invalidExpiredDate = computed(() => {
   return Boolean(!formData.value.expiredDate && expiredDateBlured.value)
     || Boolean(formData.value.expiredDate && formData.value.expiredDate.length > 4 && !isExpiredDateValid.value) //validate after completing date
+    || Boolean(expiredDateBlured.value && !isExpiredDateValid.value)
 })
 
 const isExpiredDateValid = computed(() => {
@@ -237,6 +251,23 @@ const isStep1Valid = computed(() => {
   return valid;
 });
 
+const isStep2Valid = computed(() => {
+  const allBlured = Boolean(
+    cardNumberBlured.value &&
+    expiredDateBlured.value &&
+    securityCodeBlured.value
+  );
+
+  const valid = !isStep1Valid.value &&
+    formData.value.securityCode &&
+    formData.value.cardNumber &&
+    formData.value.expiredDate &&
+    !invalidCardNumber.value &&
+    !invalidSecurityCode.value &&
+    !invalidExpiredDate.value;
+  return valid;
+});
+
 const goNext = () => {
   nameBlured.value = true;
   lastNameBlured.value = true;
@@ -253,18 +284,28 @@ const goPrevious = () => {
   emit("go-previous");
 };
 
-const isStep2Valid = computed(() => {
-  return true;
+const getCardIcon = computed(() => {
+  if (formData.value.cardNumber) {
+    switch (formData.value.cardNumber[0]) {
+      case "3":
+        return "fa-brands fa-cc-amex";
+      case "4":
+        return "fa-brands fa-cc-visa";
+      case "5":
+        return "fa-brands fa-cc-mastercard";
+      case "6":
+        return "fa-brands fa-cc-discover";
+      default:
+        return "fa-solid fa-credit-card"
+    }
+  }
+  return "";
 });
-
-const isFormValid = computed(() => {
-  console.log('isFormValid')
-});
-
 
 const purchase = () => {
-  expiredDateBlured.value = true;
-  securityCodeBlured.value = true;
+  // cardNumberBlured.value = true;
+  // expiredDateBlured.value = true;
+  // securityCodeBlured.value = true;
 
   try {
     console.log('purchase', formData._value);
