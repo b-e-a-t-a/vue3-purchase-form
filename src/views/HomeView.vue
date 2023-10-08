@@ -33,7 +33,8 @@ const decreaseStep = () => {
 .main
   display: grid
   gap: 30px
-  //line-height: 2
+.sidebar
+  grid-row-start: 1 //order details on top on Mobile
 
 @media screen and (min-width: 900px)
   .main
@@ -48,5 +49,5 @@ const decreaseStep = () => {
   .sidebar
     grid-area: sidebar
   .fitted
-    max-height: calc(100% - 51px - 5px - 40px) // button heigh and button margin
+    max-height: calc(100% - 51px - 5px - 40px) //button heigh and button margin
 </style>

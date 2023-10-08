@@ -55,7 +55,6 @@
               placeholder="(212) 692-93-92"
               type="tel"
               class="wide"
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
               errorMessage="Please enter a phone number in format (212) 692-93-92"
               :error="invalidPhone"
               @blur="phoneBlured = true"
@@ -258,7 +257,7 @@ const isStep2Valid = computed(() => {
     securityCodeBlured.value
   );
 
-  const valid = !isStep1Valid.value &&
+  const valid = isStep1Valid.value &&
     formData.value.securityCode &&
     formData.value.cardNumber &&
     formData.value.expiredDate &&
@@ -303,10 +302,6 @@ const getCardIcon = computed(() => {
 });
 
 const purchase = () => {
-  // cardNumberBlured.value = true;
-  // expiredDateBlured.value = true;
-  // securityCodeBlured.value = true;
-
   try {
     console.log('purchase', formData._value);
   } catch (error) {
@@ -339,6 +334,10 @@ const purchase = () => {
 .form-fade-enter-from,
 .form-fade-leave-to
   opacity: 0
+
+.fieldset
+  display: grid
+  gap: 10px
 
 @media screen and (min-width: 900px)
   .fieldset

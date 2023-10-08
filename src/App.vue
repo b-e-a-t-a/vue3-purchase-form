@@ -66,8 +66,6 @@ input
   border: none
   &::placeholder
     color: $placeholder-color
-  &:hover, &:focus-visible, &:focus
-    //color: $action-color
   &.error
     border: 1px solid $error-color
 option
@@ -82,4 +80,8 @@ option
 @media screen and (max-width: 600px)
   .container
     padding-left: 50px
+
+@media screen and (max-width: 500px)
+  .container
+    padding: 10px
 </style>

@@ -69,6 +69,8 @@ const total = ref(960);
     padding: 5px 0
     &.items
       padding-bottom: 15px
+    .price
+      white-space: nowrap
   .order-item
     font-size: 13px
     display: flex
@@ -81,4 +83,7 @@ const total = ref(960);
     .price
       font-size: 22px
 
+@media screen and (max-width: 900px)
+  .fieldset
+    margin-left: 0
 </style>
