@@ -61,9 +61,13 @@
               label="Phone Number"
               placeholder="(212) 692-93-92"
               type="tel"
+              autocomplete="off"
+              maxlength="18"
               class="wide"
               errorMessage="Please enter a phone number in format (212) 692-93-92"
               :error="invalidPhone"
+              @keydown="enforceFormat"
+              @keypress="formatPhoneNumber"
               @blur="phoneBlured = true"
             />
           </fieldset>
@@ -168,7 +172,8 @@ import SubmitButton from "./SubmitButton.vue";
 import { COUNTRIES } from "../utils/content.js";
 import { validateEmail,
   validatePostalCode,
-  validatePhoneNumber,
+  formatPhoneNumber,
+  enforceFormat,
   formatCardNumber,
   validateSecurityCode,
   formatExpiredDate,
@@ -224,7 +229,7 @@ const invalidPostalCode = computed(() => {
 
 const invalidPhone = computed(() => {
   return Boolean(!formData.value.phoneNumber && phoneBlured.value) //no value but touched
-    || Boolean(phoneBlured.value && !validatePhoneNumber(formData.value.phoneNumber)) //value in incorrect format
+    || Boolean(phoneBlured.value && formData.value.phoneNumber && formData.value.phoneNumber.length < 15) //value in incorrect format
 })
 
 const invalidCardNumber = computed(() => {
@@ -249,7 +254,7 @@ const isExpiredDateValid = computed(() => {
   return Boolean(validateExpirationDate(expireMonth, expireYear));
 });
 
-const emit = defineEmits(["go-next", "go-previous"]);
+const emit = defineEmits(["go-next", "go-previous", "submit"]);
 
 const isStep1Valid = computed(() => {
   const valid = formData.value.firstName &&
@@ -313,7 +318,8 @@ const getCardIcon = computed(() => {
 
 const purchase = () => {
   try {
-    console.log('purchase', formData._value);
+    console.log('purchase', formData.value);
+    emit("submit", formData.value);
   } catch (error) {
     console.log("error", error);
   }

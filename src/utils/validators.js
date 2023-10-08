@@ -10,6 +10,41 @@ export const validatePhoneNumber = (number) => {
   return /^\((\d{3})\)[- ](\d{3})[- ](\d{2})[- ](\d{2})$/.test(number);
 };
 
+export const isNumericInput = (event) => {
+  const code = event.keyCode;
+  return ((code >= 48 && code <= 57) || (code >= 96 && code <= 105)); //allow number
+};
+
+export const allowedKey = (event) => {
+  const code = event.keyCode;
+  return (event.shiftKey === true || code === 35 || code === 36) || //allow Shift, Home, End
+    (code === 8 || code === 9 || code === 13 || code === 46) || //allow Backspace, Tab, Enter, Delete
+    (code > 36 && code < 41) || //allow left, up, right, down
+    (// Allow Ctrl/Command + A,C,V,X,Z
+      (event.ctrlKey === true || event.metaKey === true) &&
+      (code === 65 || code === 67 || code === 86 || code === 88 || code === 90)
+    )
+};
+
+export const enforceFormat = (event) => {
+  if (!isNumericInput(event) && !allowedKey(event)) {
+    event.preventDefault();
+  }
+};
+
+export const formatPhoneNumber = (event) => {
+  if (allowedKey(event)) {return;}
+  const input = event.target.value.replace(/\D/g,'').substring(0,10); //first ten digits of input
+  const zip = input.substring(0,3);
+  const first = input.substring(3,6);
+  const middle = input.substring(6,8);
+  const last = input.substring(8,9);
+
+  if(input.length > 8){event.target.value = `(${zip}) ${first}-${middle}-${last}`;}
+  else if(input.length > 6){event.target.value = `(${zip}) ${first}-${middle}`;}
+  else if(input.length > 3){event.target.value = `(${zip}) ${first}`;}
+  else if(input.length > 0){event.target.value = `(${zip}`;}
+};
 
 export const formatCardNumber = (event) => {
   let code = (event.which) ? event.which : event.keyCode;

@@ -7,8 +7,10 @@
       class="main-view"
       @go-next="increaseStep"
       @go-previous="decreaseStep"
+      @submit="presentValues"
     />
     <OrderDetails class="sidebar" :class="{'fitted' : step === 1}"/>
+    <pre v-if="values">{{ values }}</pre>
   </main>
 </template>
 
@@ -20,12 +22,16 @@ import PurchaseForm from "../components/PurchaseForm.vue";
 import { ref } from "vue";
 
 let step = ref(1);
+let values = ref(null);
 
 const increaseStep = () => {
   step.value++;
 }
 const decreaseStep = () => {
   step.value--;
+}
+const presentValues = (formValues) => {
+  values.value = formValues;
 }
 </script>
 
