@@ -6,6 +6,7 @@
           <fieldset class="fieldset">
             <FormInput
               v-model="formData.firstName"
+              name="firstName"
               label="First name"
               placeholder="Elon"
               autofocus
@@ -16,6 +17,7 @@
             />
             <FormInput
               v-model="formData.lastName"
+              name="lastName"
               label="Last name"
               placeholder="Musk"
               minlength="2"
@@ -25,6 +27,7 @@
             />
             <FormInput
               v-model="formData.email"
+              name="email"
               label="Email"
               placeholder="elon@spacex.com"
               type="email"
@@ -36,11 +39,14 @@
             />
             <FormSelect
               v-model="formData.country"
+              name="country"
               label="Country"
+              autocomplete="off"
               :options="countries"
             />
             <FormInput
               v-model="formData.postalCode"
+              name="postalCode"
               label="Postal Code"
               placeholder="10001"
               type="text"
@@ -51,6 +57,7 @@
             />
             <FormInput
               v-model="formData.phoneNumber"
+              name="phoneNumber"
               label="Phone Number"
               placeholder="(212) 692-93-92"
               type="tel"
@@ -80,6 +87,7 @@
           <fieldset class="fieldset">
             <FormInput
               v-model="formData.cardNumber"
+              name="cardNumber"
               label="Credit Card Number"
               placeholder="0000 - 0000 - 0000 - 0000"
               type="tel"
@@ -99,6 +107,7 @@
             />
             <FormInput
               v-model="formData.securityCode"
+              name="securityCode"
               label="Security code"
               placeholder="***"
               autocomplete="off"
@@ -113,6 +122,7 @@
             />
             <FormInput
               v-model="formData.expiredDate"
+              name="expiredDate"
               label="Expiration date"
               placeholder="MM / YY"
               type="text"

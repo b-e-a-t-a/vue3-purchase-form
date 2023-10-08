@@ -1,8 +1,10 @@
 <template>
   <div class="form-select">
-    <label>{{ label }}</label>
+    <label :for="name">{{ label }}</label>
     <select
       :value="modelValue"
+      :name="name"
+      :id="name"
       class="select"
       v-bind="{
         ...$attrs,
@@ -34,6 +36,10 @@ defineProps({
   options: {
     type: Array,
     required: true
+  },
+  name: {
+    type: String,
+    default: ""
   }
 })
 

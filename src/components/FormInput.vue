@@ -1,8 +1,10 @@
 <template>
   <div class="form-input" :class="{'error': error}">
-    <label>{{ label }}</label>
+    <label :for="name">{{ label }}</label>
     <input
       :value="modelValue"
+      :name="name"
+      :id="name"
       isTooltipVisible
       class="input"
       v-bind="$attrs"
@@ -52,6 +54,10 @@ const props = defineProps({
     default: false
   },
   tooltipText: {
+    type: String,
+    default: ""
+  },
+  name: {
     type: String,
     default: ""
   }
