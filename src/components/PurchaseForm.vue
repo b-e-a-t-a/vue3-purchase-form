@@ -10,9 +10,11 @@
               label="First name"
               placeholder="Elon"
               autofocus
+              required
               minlength="2"
+              pattern="^[a-zA-Z]+[a-zA-Z\s]*?[^0-9]"
               errorMessage="Please enter a valid first name"
-              :error="(!formData.firstName || formData.firstName.length < 2) && nameBlured"
+              :error="invalidName"
               @blur="nameBlured = true"
             />
             <FormInput
@@ -21,8 +23,9 @@
               label="Last name"
               placeholder="Musk"
               minlength="2"
+              pattern="^[a-zA-Z]+[a-zA-Z\s]*?[^0-9]"
               errorMessage="Please enter a valid last name"
-              :error="(!formData.lastName || formData.lastName.length < 2) && lastNameBlured"
+              :error="invalidLastName"
               @blur="lastNameBlured = true"
             />
             <FormInput
@@ -33,6 +36,7 @@
               type="email"
               class="wide"
               autocomplete="off"
+              required
               errorMessage="Please enter a valid email"
               :error="invalidEmail"
               @blur="emailBlured = true"
@@ -42,6 +46,7 @@
               name="country"
               label="Country"
               autocomplete="off"
+              required
               :options="countries"
             />
             <FormInput
@@ -51,6 +56,7 @@
               placeholder="10001"
               type="text"
               maxlength="5"
+              required
               errorMessage="Please enter a valid postal code"
               :error="invalidPostalCode"
               @blur="postalCodeBlured = true"
@@ -64,6 +70,7 @@
               autocomplete="off"
               maxlength="18"
               class="wide"
+              required
               errorMessage="Please enter a phone number in format (212) 692-93-92"
               :error="invalidPhone"
               @keydown="enforceFormat"
@@ -79,7 +86,7 @@
             <template #icon>
               <i
                 class="fa-solid fa-cart-shopping"
-                style="color: white; marginRight: 5px; font-size: 15px"
+                style="color: $color-white; marginRight: 5px; font-size: 15px"
               ></i>
             </template>
           </SubmitButton>
@@ -97,8 +104,9 @@
               type="tel"
               class="wide"
               autocomplete="off"
+              required
               :inputIcon="getCardIcon"
-              styleIcon="color: white;
+              styleIcon="color: $color-white;
                 background-color: #243c64;
                 border: 1px solid #c2c2c2;
                 font-size: 20px;"
@@ -120,6 +128,7 @@
               maxlength="3"
               pattern="^[0-9]{3}$"
               tooltipText="The 3 digits on the back of your credit card"
+              required
               errorMessage="Please enter 3 digit security code"
               :error="invalidSecurityCode"
               @blur="securityCodeBlured = true"
@@ -133,8 +142,9 @@
               autocomplete="off"
               maxlength="5"
               pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$"
-              errorMessage="Please enter a valid expiration date"
               inputmode="numeric"
+              required
+              errorMessage="Please enter a valid expiration date"
               :error="invalidExpiredDate"
               @keyup="formatExpiredDate"
               @blur="expiredDateBlured = true"
@@ -148,7 +158,7 @@
             <template #icon>
               <i
                 class="fa-solid fa-cart-shopping"
-                style="color: white; marginRight: 5px; font-size: 15px"
+                style="color: $color-white; marginRight: 5px; font-size: 15px"
               ></i>
             </template>
           </SubmitButton>
@@ -170,7 +180,8 @@ import FormInput from "./FormInput.vue";
 import FormSelect from "./FormSelect.vue";
 import SubmitButton from "./SubmitButton.vue";
 import { COUNTRIES } from "../utils/content.js";
-import { validateEmail,
+import { validateName,
+  validateEmail,
   validatePostalCode,
   formatPhoneNumber,
   enforceFormat,
@@ -216,6 +227,16 @@ const phoneBlured = ref(false);
 const cardNumberBlured = ref(false);
 const expiredDateBlured = ref(false);
 const securityCodeBlured = ref(false);
+
+const invalidName = computed(() => {
+  return Boolean(!formData.value.firstName && nameBlured.value)
+    || Boolean(nameBlured.value && !validateName(formData.value.firstName))
+});
+
+const invalidLastName = computed(() => {
+  return Boolean(!formData.value.lastName && lastNameBlured.value)
+   || Boolean(lastNameBlured.value && !validateName(formData.value.lastName))
+});
 
 const invalidEmail = computed(() => {
   return Boolean(!formData.value.email && emailBlured.value) //no value but touched
@@ -342,13 +363,16 @@ const purchase = () => {
     border-color: $placeholder-color
     border-bottom: 2px solid darken($placeholder-color, 10%)
     color: darken($placeholder-color, 30%)
+    transition: 0.5s
 .form-fade-enter-active
   transition: opacity 0.3s ease-in-out
 .form-fade-leave-active
+  display: none
   transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1)
 
 .form-fade-enter-from,
 .form-fade-leave-to
+  transform: translateX(10px)
   opacity: 0
 
 .fieldset

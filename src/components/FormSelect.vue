@@ -48,11 +48,13 @@ defineProps({
 <style lang="sass" scoped>
 @import "../assets/main.sass"
 .form-select
-  background-color: white
+  background-color: $color-white
   border-radius: 3px
   padding: 5px 10px
   border-bottom: solid 1px rgba(0, 0, 0, 0.3)
   line-height: 1.3em
+  &:hover
+    border: 1px solid lighten($action-color, 20%)
   &:focus-within
     border: 1px solid $action-color
 </style>

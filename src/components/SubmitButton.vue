@@ -36,7 +36,7 @@ defineProps({
   border-radius: 3px
   padding: 14px 0
   margin: 40px 0 5px
-  color: white
+  color: $color-white
   cursor: pointer
   outline: none
   display: flex
@@ -46,6 +46,7 @@ defineProps({
   &:hover
     background-color: darken($action-color, 15%)
     border-color: darken($action-color, 15%)
+    transition: 0.5s
   &:disabled
     opacity: 0.5
     cursor: not-allowed

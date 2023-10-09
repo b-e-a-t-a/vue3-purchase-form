@@ -53,7 +53,7 @@ const total = ref(960);
 <style lang="sass" scoped>
 @import "../assets/main.sass"
 .fieldset
-  background-color: white
+  background-color: $color-white
   border-radius: 3px
   padding: 6px
   margin-left: 10px

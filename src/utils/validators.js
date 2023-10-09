@@ -1,3 +1,7 @@
+export const validateName = (name) => {
+  return /^[a-zA-Z]+[a-zA-Z\s]*?[^0-9]{2,}$/i.test(name);
+};
+
 export const validateEmail = (email) => {
   return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 };

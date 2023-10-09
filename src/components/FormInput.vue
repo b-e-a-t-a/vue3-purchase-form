@@ -67,7 +67,7 @@ const props = defineProps({
 <style lang="sass" scoped>
 @import "../assets/main.sass"
 .form-input
-  background-color: white
+  background-color: $color-white
   border-radius: 3px
   padding: 3px 10px 7px
   border-bottom: solid 2px $border-bottom-color
@@ -78,6 +78,8 @@ const props = defineProps({
     left: calc(100% - 10px)
     bottom: 50%
     transform: translate(-100%, 50%)
+  &:hover
+    border: 1px solid lighten($action-color, 20%)
   &:focus-within
     border: 1px solid $action-color
   &.error
@@ -96,7 +98,7 @@ const props = defineProps({
   width: 160px
   background: grey
   text-align: right
-  color: white
+  color: $color-white
   font-weight: 600
   font-size: 12px
   border-radius: 2px

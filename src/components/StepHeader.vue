@@ -34,7 +34,7 @@ defineProps({
     min-height: 20px
     margin-right: 10px
     margin-left: calc(0px - $step-margin)
-    color: white
+    color: $color-white
     background-color: black
     border-radius: 50%
     font-size: 15px

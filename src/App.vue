@@ -63,7 +63,6 @@ select
 input
   box-sizing: border-box
   color: black
-  border: none
   &::placeholder
     color: $placeholder-color
   &.error
